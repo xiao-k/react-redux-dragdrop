@@ -12,7 +12,7 @@ const styles = {
 export default class DropKingSlimeCircle extends React.Component {
   render(){
     var {
-      dropCircle, connectDropTarget, hovered
+      dropCircle, motionMainTopLeft, connectDropTarget, hovered
     } = this.props;
     const mainDivStyle = {
       normal: {
@@ -27,8 +27,8 @@ export default class DropKingSlimeCircle extends React.Component {
       },
       king: {
           position: "absolute",
-          top:    dropCircle.mainCircle.top + "px",
-          left:   dropCircle.mainCircle.left + "px",
+          top:    motionMainTopLeft.top + "px",
+          left:   motionMainTopLeft.left + "px",
           width:  ( dropCircle.mainCircle.r * 2 ) + "px",
           height: ( dropCircle.mainCircle.r * 2 ) + "px"
       }
@@ -92,7 +92,11 @@ DropKingSlimeCircle.propTypes = {
       y: PropTypes.number.isRequired,
       r: PropTypes.number.isRequired
     }))
-  }).isRequired
+  }).isRequired,
+  motionMainTopLeft: PropTypes.shape({
+    left: PropTypes.number.isRequired,
+    top:  PropTypes.number.isRequired,
+  })
 };
 
 function collect(connect, monitor) {

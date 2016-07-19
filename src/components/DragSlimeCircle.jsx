@@ -4,12 +4,13 @@ import slimePng from '../images/slime.png';
 
 export default class DragSlimeCircle extends React.Component {
   render(){
-    var { dragCircleData, connectDragSource } = this.props;
+    // var { dragCircleData, connectDragSource } = this.props;
+    var { dragCircleData, motionValue, connectDragSource } = this.props;
     return connectDragSource(
       <div style={{
         position: "absolute",
-        top:    dragCircleData.top,
-        left:   dragCircleData.left,
+        top:    motionValue.top + "px",
+        left:   motionValue.left + "px",
         width:  ( dragCircleData.r * 2 ) + "px",
         height: ( dragCircleData.r * 2 ) + "px"
       }}>
@@ -18,13 +19,18 @@ export default class DragSlimeCircle extends React.Component {
     );
   }
 }
+
 DragSlimeCircle.propTypes = {
   connectDragSource: React.PropTypes.func.isRequired,
   dropAction : PropTypes.func.isRequired,
   dragCircleData: PropTypes.shape({
     id:   PropTypes.number.isRequired,
     r:    PropTypes.number.isRequired
-  }).isRequired
+  }).isRequired,
+  motionValue: PropTypes.shape({
+    top:  PropTypes.number.isRequired,
+    left: PropTypes.number.isRequired
+  })
 };
 
 function collect(connect, monitor) {
