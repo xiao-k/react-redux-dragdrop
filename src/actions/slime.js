@@ -1,5 +1,34 @@
 import d3 from 'd3';
 
+export function setSlimeCirclesOneByOne( index ){
+  return ( dispatch, getState ) => {
+    const dropCircle = getState().rootReducer.slime.dropCircle,
+          CHILD_R  = dropCircle.mainCircle.r / 3,
+          INTERVAL = 20;
+    console.log(dropCircle);
+    var resultCircles;
+    var tmpDragXY = returnDragXY(
+                        index,
+                        { left: dropCircle.mainCircle.left,
+                          top:  dropCircle.mainCircle.top,
+                          r:    dropCircle.mainCircle.r },
+                        CHILD_R,
+                        INTERVAL
+                     );
+    var addDragCircle = {
+      id:   index,
+      left: tmpDragXY.left,
+      top:  tmpDragXY.top,
+      r:    CHILD_R
+    };
+
+    return dispatch({
+      type: 'ADD_SLIME_CIRLE',
+      addDragCircle
+    });
+  }
+}
+
 export function setSlimeCircles(){
   const windowData = {
           innerWidth:  window.innerWidth,
@@ -7,29 +36,9 @@ export function setSlimeCircles(){
   const MAIN_R = ( windowData.innerWidth > windowData.innerHeight ) ?
                   windowData.innerHeight / 7 : windowData.innerWidth / 7,
         MAIN_LEFT = windowData.innerWidth  * 3 / 6 - MAIN_R,
-        MAIN_TOP  = windowData.innerHeight * 3 / 6 - MAIN_R,
-        CHILD_R  = MAIN_R / 3,
-        INTERVAL = 20;
-  var dragCircles = [],
-      dropCircleData   = {};
+        MAIN_TOP  = windowData.innerHeight * 3 / 6 - MAIN_R;
+  var dropCircleData   = {};
   var loopCnt = 0;
-
-  // set slime circles (drag circles) data
-  while( loopCnt <= 7 ){
-    var tmpDragXY = returnDragXY(
-                        loopCnt,
-                        { left: MAIN_LEFT, top: MAIN_TOP, r: MAIN_R },
-                        CHILD_R,
-                        INTERVAL
-                     );
-    dragCircles.push({
-      id:  loopCnt,
-      left: tmpDragXY.left,
-      top:  tmpDragXY.top,
-      r:    CHILD_R
-    });
-    loopCnt++;
-  }
 
   // set king slime circles (drop circles) data
   dropCircleData = {
@@ -45,8 +54,7 @@ export function setSlimeCircles(){
   // dispatch
   return {
     type: 'SET_INIT_SLIME_CIRLES',
-    dropCircleData,
-    dragCircles
+    dropCircleData
   };
 }
 

@@ -1,9 +1,12 @@
+import range from 'lodash/range';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import React, { Component, PropTypes } from 'react';
 import * as slimeActions from '../actions/slime';
 
 import DragDropCircles from '../components/DragDropCircles';
+
+const NUM_SLIMES = 8;
 
 class SlimeContainer extends Component {
   constructor(props) {
@@ -14,6 +17,14 @@ class SlimeContainer extends Component {
 
   componentWillMount() {
     this.props.slimeActionBind.setSlimeCircles();
+  }
+
+  componentDidMount() {
+    range(NUM_SLIMES).forEach((index) => {
+      setTimeout(() => {
+        this.props.slimeActionBind.setSlimeCirclesOneByOne( index );
+      }, index * 500);
+    });
   }
 
   dropAction( dropSlimeCircleData ){
